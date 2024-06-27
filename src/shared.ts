@@ -64,6 +64,16 @@ export interface SetLike<T> extends ReadonlySetLike<T> {
     clear(): void;
 }
 
+export interface SetUtils<T> {
+    difference<U>(other: ReadonlySetLike<U>): Set<T>;
+    intersection(other: ReadonlySetLike<T>): Set<T>;
+    isDisjointFrom(other: ReadonlySetLike<T>): boolean;
+    isSubsetOf(other: ReadonlySetLike<T>): boolean;
+    isSupersetOf(other: ReadonlySetLike<T>): boolean;
+    symmetricDifference<U>(other: ReadonlySetLike<U>): Set<T | U>;
+    union<U>(other: ReadonlySetLike<U>): Set<T | U>;
+}
+
 export class Collection<T> extends Set<T> {
     constructor(iterable?: Iterable<T>) {
         super(iterable);
