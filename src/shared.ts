@@ -31,3 +31,19 @@ export function implementsCmp<T>(x: T | Cmp<T>): x is Cmp<T> {
         x.cmp.length === 1
     );
 }
+
+export function defaultEqualityFn<K>(a: K, b: K): boolean {
+    if (implementsEq(a)) {
+        return a.eq(b);
+    }
+    return a === b;
+}
+
+export function defaultComparatorFn<K>(a: K, b: K): Ordering {
+    if (implementsCmp(a)) {
+        return a.cmp(b);
+    }
+    if (a < b) return Ordering.Less;
+    if (a > b) return Ordering.Greater;
+    return Ordering.Equal;
+}
