@@ -219,10 +219,12 @@ export class TimedSet<T> implements ITimedSet<T>, SetLike<T>, SetUtils<T> {
     }
 }
 
-type TimerId = ReturnType<typeof globalThis.setTimeout>;
+type TimerId = number;
+declare function setTimeout(callback: () => void, delayMs: number): TimerId;
+declare function clearTimeout(timerId: TimerId): void;
 
 class Timer {
-    public timerId: TimerId;
+    public timerId: ReturnType<typeof setTimeout>;
     private expirationTimeMs: number;
 
     public constructor(callback: () => void, delayMs: number) {
