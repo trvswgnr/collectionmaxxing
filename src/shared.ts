@@ -68,12 +68,20 @@ export class Collection<T> extends Set<T> {
     constructor(iterable?: Iterable<T>) {
         super(iterable);
     }
+
+    /**
+     * Returns an array containing all of the elements in this collection.
+     */
     toArray(): Array<T> {
         return Array.from(this);
     }
-    hasAll(coll: ReadonlySetLike<T>): boolean {
+
+    /**
+     * Returns true if this collection contains all of the elements in the specified collection.
+     */
+    hasAll(set: ReadonlySetLike<T>): boolean {
         let result = true;
-        for (const value of coll) {
+        for (const value of set) {
             if (!this.has(value)) {
                 result = false;
                 break;
@@ -81,34 +89,54 @@ export class Collection<T> extends Set<T> {
         }
         return result;
     }
-    removeAll(coll: Iterable<T>): number {
+
+    /**
+     * Removes all of this collection's elements that are also contained in the specified collection.
+     */
+    deleteAll(iter: Iterable<T>): number {
         let result = 0;
-        for (const value of coll) {
+        for (const value of iter) {
             if (this.delete(value)) {
                 result++;
             }
         }
         return result;
     }
-    retainAll(coll: ReadonlySetLike<T>): number {
+
+    /**
+     * Retains only the elements in this collection that are contained in the specified collection.
+     */
+    retainAll(set: ReadonlySetLike<T>): number {
         let result = 0;
         for (const value of this) {
-            if (!coll.has(value)) {
+            if (!set.has(value)) {
                 this.delete(value);
                 result++;
             }
         }
         return result;
     }
+
+    /**
+     * Returns true if this collection contains no elements.
+     */
     isEmpty(): boolean {
         return this.size === 0;
     }
-    addAll(coll: Iterable<T>): this {
-        for (const value of coll) {
+
+    /**
+     * Adds all of the elements in the specified collection to this collection.
+     */
+    addAll(iter: Iterable<T>): this {
+        for (const value of iter) {
             this.add(value);
         }
         return this;
     }
+
+    /**
+     * Removes all of the elements of this collection that satisfy the given predicate.
+     */
     removeIf(predicate: (value: T) => boolean): number {
         let result = 0;
         for (const value of this) {
