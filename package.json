@@ -1,0 +1,9 @@
+{
+    "name": "collectionmaxxing",
+    "module": "index.ts",
+    "type": "module",
+    "devDependencies": {
+        "@types/bun": "^1.1.5",
+        "typescript": "^5.5.2"
+    }
+}
