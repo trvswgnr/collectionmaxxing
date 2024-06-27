@@ -47,3 +47,76 @@ export function defaultComparatorFn<K>(a: K, b: K): Ordering {
     if (a > b) return Ordering.Greater;
     return Ordering.Equal;
 }
+
+export interface ReadonlySetLike<T> {
+    [Symbol.iterator](): Iterator<T>;
+    size: number;
+    entries(): IterableIterator<[T, T]>;
+    forEach(fn: (value: T) => void): void;
+    has(value: T): boolean;
+    keys(): IterableIterator<T>;
+    values(): IterableIterator<T>;
+}
+
+export interface SetLike<T> extends ReadonlySetLike<T> {
+    add(value: T): this;
+    delete(value: T): boolean;
+    clear(): void;
+}
+
+export class Collection<T> extends Set<T> {
+    constructor(iterable?: Iterable<T>) {
+        super(iterable);
+    }
+    toArray(): Array<T> {
+        return Array.from(this);
+    }
+    hasAll(coll: ReadonlySetLike<T>): boolean {
+        let result = true;
+        for (const value of coll) {
+            if (!this.has(value)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+    removeAll(coll: Iterable<T>): number {
+        let result = 0;
+        for (const value of coll) {
+            if (this.delete(value)) {
+                result++;
+            }
+        }
+        return result;
+    }
+    retainAll(coll: ReadonlySetLike<T>): number {
+        let result = 0;
+        for (const value of this) {
+            if (!coll.has(value)) {
+                this.delete(value);
+                result++;
+            }
+        }
+        return result;
+    }
+    isEmpty(): boolean {
+        return this.size === 0;
+    }
+    addAll(coll: Iterable<T>): this {
+        for (const value of coll) {
+            this.add(value);
+        }
+        return this;
+    }
+    removeIf(predicate: (value: T) => boolean): number {
+        let result = 0;
+        for (const value of this) {
+            if (predicate(value)) {
+                this.delete(value);
+                result++;
+            }
+        }
+        return result;
+    }
+}
